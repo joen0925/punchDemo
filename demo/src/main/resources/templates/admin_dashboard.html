@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>打卡系統</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header bg-primary text-white">
+            <h3>管理員系統</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text">功能列表：</p>
+
+            <form th:action="@{/admin/dashboard/punch}" method="post">
+                <button type="submit" class="btn btn-primary">打卡</button>
+            </form>
+
+            <a th:href="@{/admin/dashboard/punchSystem}" class="btn btn-outline-primary">打卡系統</a>
+
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let message = /*[[${message}]]*/ null;
+    if (message !== null && message !== '') {
+        if (message === 'success') {
+            alert('打卡成功！');
+        }else{
+            alert('打卡失敗!')
+        }
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

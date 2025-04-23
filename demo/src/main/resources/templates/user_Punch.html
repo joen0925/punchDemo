@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>打卡系統</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header bg-primary text-white">
+            <h3>打卡系統</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text">一搬使用者請選擇要打卡的類型：</p>
+
+            <form th:action="@{/punch/in}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-success me-2">上班打卡</button>
+            </form>
+
+            <form th:action="@{/punch/out}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">下班打卡</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
