@@ -2,8 +2,11 @@
 <html lang="zh-Hant" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>打卡查詢系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="bg-light">
 
@@ -11,7 +14,7 @@
     <h2 class="mb-4 text-center">打卡查詢與管理</h2>
 
     <!-- 查詢表單 -->
-    <form class="row mb-4" th:action="@{/admin/punchSystem/search}" method="post">
+    <form class="row mb-4" th:action="@{/admin/punchSystem/search}" method="get">
         <div class="col-md-4">
             <input type="text" name="name" class="form-control" placeholder="請輸入姓名查詢" th:value="${searchName}">
         </div>
@@ -39,11 +42,12 @@
                         <td th:text="${record.location}">辦公室</td>
                         <td class="text-center">
                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
-                                th:attr="data-id=${record.id}, data-name=${record.name}, data-checktime=${record.checkTime}
-                                , data-location=${record.location}">修改</button>
-                            <a th:href="@{'/punch/delete/' + ${record.id}}" class="btn btn-sm btn-danger"
+                                th:data-name="${record.name}" th:data-time="${record.checkTime}" th:data-location="${record.location}" th:data-id="${record.id}">
+                                修改
+                            </button>
+                            <a th:href="@{'/admin/punchSystem/del/' + ${record.id}}" class="btn btn-sm btn-danger"
                                onclick="return confirm('確定要刪除嗎？')">刪除</a>
-                        </td>
+                        </td>                        
                     </tr>
                     <tr th:if="${#lists.isEmpty(records)}">
                         <td colspan="4" class="text-center text-muted">查無資料</td>
@@ -54,48 +58,86 @@
     </div>
 </div>
 
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <form class="modal-content" method="post" th:action="@{/punch/update}">
-        <div class="modal-header">
-          <h5 class="modal-title">修改打卡資料</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">打卡資料修改</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="editName" class="form-label">姓名</label>
+                    <input type="text" class="form-control" id="editName" name="name">
+                </div>
+                <div class="mb-3">
+                    <label for="editTime" class="form-label">打卡時間</label>
+                    <input type="text" class="form-control" id="editTime" name="checkTime">
+                </div>
+                <div class="mb-3">
+                    <label for="editLocation" class="form-label">地點</label>
+                    <input type="text" class="form-control" id="editLocation" name="location">
+                </div>
+                <input type="hidden" class="form-control" id="editId" name="id">
+            </div>            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="modalUpdateBtn">修改</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>            
+            </div>
         </div>
-        <div class="modal-body">
-          <input type="hidden" name="id" id="editId">
-          <div class="mb-3">
-            <label for="editName" class="form-label">姓名</label>
-            <input type="text" class="form-control" id="editName" name="name">
-          </div>
-          <div class="mb-3">
-            <label for="editCheckTime" class="form-label">打卡時間</label>
-            <input type="text" class="form-control" id="editCheckTime" name="checkTime">
-          </div>
-          <div class="mb-3">
-            <label for="editLocation" class="form-label">地點</label>
-            <input type="text" class="form-control" id="editLocation" name="location">
-          </div>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">儲存</button>
-        </div>
-      </form>
     </div>
-  </div>
-  
-  
-</body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const modal = document.getElementById('editModal');
-      modal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-        document.getElementById('editId').value = button.getAttribute('data-id');
-        document.getElementById('editName').value = button.getAttribute('data-name');
-        document.getElementById('editCheckTime').value = button.getAttribute('data-checktime');
-        document.getElementById('editLocation').value = button.getAttribute('data-location');
-      });
+        const editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const name = button.getAttribute('data-name');
+            const time = button.getAttribute('data-time');
+            const location = button.getAttribute('data-location');
+            const id = button.getAttribute('data-id');
+        
+            // 設定到input
+            editModal.querySelector('#editName').value = name;
+            editModal.querySelector('#editTime').value = time;
+            editModal.querySelector('#editLocation').value = location;
+            editModal.querySelector('#editId').value = id;
+        });
     });
+    //修改用呼叫 API的方式
+    document.getElementById("modalUpdateBtn").addEventListener("click", function () {
+        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+        const name = document.getElementById("editName").value;
+        const checkTime = document.getElementById("editTime").value;
+        const location = document.getElementById("editLocation").value;
+        const id = document.getElementById("editId").value;
+        const apiUrl = "/api/checkpunch/"+id;
+        const data = {
+            name: name,
+            checkTime: checkTime,
+            location: location,            
+        };
+
+        fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("HTTP error " + res.status);
+            return res.json();
+        })
+        .then(data => alert('成功！回傳：' + JSON.stringify(data)))
+        .catch(err => alert('錯誤：' + err));
+    });
+
 </script>
+        
+  
+</body>
 </html>

@@ -18,7 +18,7 @@ import com.example.demo.service.CheckPunchService;
 
 
 @RestController
-@RequestMapping("/admin/checkpunch")
+@RequestMapping("/api/checkpunch")
 public class AdminCheckPunchAPIController {
     @Autowired
     private CheckPunchService checkPunchService;

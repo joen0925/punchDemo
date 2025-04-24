@@ -26,7 +26,7 @@ public class AdminPunchSystemController {
         return "punch_system";
     }
     
-    @PostMapping("/search")
+    @GetMapping("/search")
     public String search(@RequestParam String name,Model model) {
         List<CheckPunch> checkPunchList = new ArrayList<CheckPunch>();
         checkPunchList = adminPunchSystemService.search(name);        
@@ -34,4 +34,12 @@ public class AdminPunchSystemController {
         model.addAttribute("searchName", name);
         return "punch_system";
     }
+
+    @GetMapping("/del/{id}")
+    public String delete(@PathVariable Integer id,Model model) {
+        adminPunchSystemService.delete(id);     
+        return "punch_system";
+    }
+
+
 }

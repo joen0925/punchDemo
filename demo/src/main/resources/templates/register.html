@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>註冊頁面</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="bg-light d-flex align-items-center" style="height: 100vh;">
 <div class="container">
@@ -22,11 +22,13 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼</label>
                             <input type="password" class="form-control" id="passWord" name="passWord" required>
+                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">顯示</button>
                         </div>
 
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">確認密碼</label>
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">顯示</button>
                         </div>
 
                         <div class="d-grid">
@@ -51,8 +53,34 @@
         </div>
     </div>
 </div>
+<script>
+        // 確保 DOM 元素已加載後再執行
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePasswordButton = document.getElementById("togglePassword");
+            const passwordField = document.getElementById("passWord");
+            const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+            const confirmPassword = document.getElementById("confirmPassword");
 
-<!-- Bootstrap JS（可選） -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            togglePasswordButton.addEventListener("click", function () {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    togglePasswordButton.textContent = "隱藏";
+                } else {
+                    passwordField.type = "password";
+                    togglePasswordButton.textContent = "顯示";
+                }
+            });
+
+            toggleConfirmPassword.addEventListener("click", function () {
+                if (confirmPassword.type === "password") {
+                    confirmPassword.type = "text";
+                    toggleConfirmPassword.textContent = "隱藏";
+                } else {
+                    confirmPassword.type = "password";
+                    toggleConfirmPassword.textContent = "顯示";
+                }
+            });
+        });
+    </script>
 </body>
 </html>

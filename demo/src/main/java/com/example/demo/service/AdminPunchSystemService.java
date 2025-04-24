@@ -17,4 +17,9 @@ public class AdminPunchSystemService {
     public List<CheckPunch> search(String name){            
         return ckRepository.findByName(name);
     }
+
+    public void delete(Integer id){
+        ckRepository.delete(ckRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("找不到資料")));
+    }
 }
