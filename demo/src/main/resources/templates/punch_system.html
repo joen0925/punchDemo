@@ -45,7 +45,7 @@
                                 th:data-name="${record.name}" th:data-time="${record.checkTime}" th:data-location="${record.location}" th:data-id="${record.id}">
                                 修改
                             </button>
-                            <a th:href="@{'/admin/punchSystem/del/' + ${record.id}}" class="btn btn-sm btn-danger"
+                            <a th:href="@{'/admin/punchSystem/del?id=' + ${record.id}+'&name=' + ${record.name}}" class="btn btn-sm btn-danger"
                                onclick="return confirm('確定要刪除嗎？')">刪除</a>
                         </td>                        
                     </tr>
@@ -66,25 +66,28 @@
             <h5 class="modal-title" id="editModalLabel">打卡資料修改</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="editName" class="form-label">姓名</label>
-                    <input type="text" class="form-control" id="editName" name="name">
+            <form th:action="@{/admin/punchSystem/update}" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="editName" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTime" class="form-label">打卡時間</label>
+                        <input type="text" class="form-control" id="editTime" name="checkTime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLocation" class="form-label">地點</label>
+                        <input type="text" class="form-control" id="editLocation" name="location">
+                    </div>
+                    <input type="hidden" class="form-control" id="editId" name="id">
+                </div>            
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-primary" id="modalUpdateBtn">修改</button> API用-->
+                    <button type="submit" class="btn btn-primary" id="modalUpdate">修改</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>            
                 </div>
-                <div class="mb-3">
-                    <label for="editTime" class="form-label">打卡時間</label>
-                    <input type="text" class="form-control" id="editTime" name="checkTime">
-                </div>
-                <div class="mb-3">
-                    <label for="editLocation" class="form-label">地點</label>
-                    <input type="text" class="form-control" id="editLocation" name="location">
-                </div>
-                <input type="hidden" class="form-control" id="editId" name="id">
-            </div>            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modalUpdateBtn">修改</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>            
-            </div>
+            </form>            
         </div>
         </div>
     </div>
@@ -97,15 +100,14 @@
             const time = button.getAttribute('data-time');
             const location = button.getAttribute('data-location');
             const id = button.getAttribute('data-id');
-        
-            // 設定到input
+                    
             editModal.querySelector('#editName').value = name;
             editModal.querySelector('#editTime').value = time;
             editModal.querySelector('#editLocation').value = location;
             editModal.querySelector('#editId').value = id;
         });
     });
-    //修改用呼叫 API的方式
+    //修改用呼叫 API的方式 嘗試前後端分離 + REST API
     document.getElementById("modalUpdateBtn").addEventListener("click", function () {
         const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
