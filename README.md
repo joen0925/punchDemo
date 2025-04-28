@@ -1,16 +1,6 @@
 # 🕘 Punch Demo 打卡系統實作（Spring Boot）
 
 這是一個使用 Spring Boot 打造的打卡系統，整合了後端渲染（Thymeleaf）、Spring Security 登入機制與 RESTful API，提供基本的帳號管理、區分一般使用者和管理員功能與打卡紀錄增刪改查功能。
-### 功能畫面
-
-<div style="display:flex;">
-<img src="./graphics/loginPage.png"  width="30%"  height="300"">
-<img src="./graphics/registerPage.png"   width="30%"">
-<img src="./graphics/punchSystem.png"   width="50%"">
-<img src="./graphics/punchSystemUpdate.png"   width="50%"">
-</div>
-
----
 
 ## 🚀 技術棧（Tech Stack）
 
@@ -28,6 +18,24 @@
 - **Git** - 版本控制
 
 ---
+
+## 功能畫面
+
+### 登入頁面
+<img src="./graphics/loginPage.png" width="50%">
+
+### 註冊頁面
+<img src="./graphics/registerPage.png" width="50%">
+
+### 打卡系統
+<img src="./graphics/punchSystem.png" width="70%">
+
+### 打卡紀錄更新
+<img src="./graphics/punchSystemUpdate.png" width="70%">
+
+---
+
+
 
 ## 🔐 功能介紹
 
