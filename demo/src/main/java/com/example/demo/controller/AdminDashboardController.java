@@ -24,12 +24,18 @@ public class AdminDashboardController {
         return "admin_dashboard";
     }
     
-    @PostMapping("/punch")
-    public String punch(Principal principal,RedirectAttributes redirectAttributes) {
-        String message = userCheckPunchService.punch(principal);
+    @PostMapping("/punchIn")
+    public String punchIn(Principal principal,RedirectAttributes redirectAttributes) {
+        String message = userCheckPunchService.punchIn(principal);
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/admin/dashboard";
-    }  
+    }
+    @PostMapping("/punchOut")
+    public String punchOut(Principal principal,RedirectAttributes redirectAttributes) {
+        String message = userCheckPunchService.punchOut(principal);
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/admin/dashboard";
+    }
     @GetMapping("/punchSystem")
     public String getMethodName() {
         return "redirect:/admin/punchSystem";

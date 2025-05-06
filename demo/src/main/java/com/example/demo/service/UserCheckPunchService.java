@@ -19,7 +19,26 @@ public class UserCheckPunchService {
     private CheckPunchRepository ckRepository;
     
 
-    public String punch(Principal principal) {
+    public String punchIn(Principal principal) {
+        CheckPunch checkPunch = new CheckPunch();   
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formatted = now.format(formatter);             
+        String username = principal.getName();
+        checkPunch.setName(username);
+        checkPunch.setCheckTime(formatted);
+        checkPunch.setLocation("地球");
+        try {
+            ckRepository.save(checkPunch);    
+        } catch (Exception e) {
+            return "error";
+        }
+        
+        return "success";
+    }
+
+    public String punchOut(Principal principal) {
         CheckPunch checkPunch = new CheckPunch();   
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

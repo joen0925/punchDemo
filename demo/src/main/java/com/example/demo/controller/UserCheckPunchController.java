@@ -37,9 +37,15 @@ public class UserCheckPunchController {
         return new String();
     }
     
-    @PostMapping("/punch")
-    public String punch(Principal principal,RedirectAttributes redirectAttributes) {
-        String message = userCheckPunchService.punch(principal);
+    @PostMapping("/punchIn")
+    public String punchIn(Principal principal,RedirectAttributes redirectAttributes) {
+        String message = userCheckPunchService.punchIn(principal);
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/user/userdashboard";
+    }
+    @PostMapping("/punchOut")
+    public String punchOut(Principal principal,RedirectAttributes redirectAttributes) {
+        String message = userCheckPunchService.punchOut(principal);
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/user/userdashboard";
     }
